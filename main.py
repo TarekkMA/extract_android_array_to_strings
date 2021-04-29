@@ -1,11 +1,19 @@
-import sys
 import os
 import stringcase
 import lxml.etree as ET
 from pathlib import Path
+import argparse
+from operator import attrgetter
 
-PROJECT_RES_PATH = sys.argv[1]
-OUT_RES_PATH = PROJECT_RES_PATH  # "./out"
+
+def get_args():
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument('-o, --output', dest='output', type=str, help='output directory', default="./out")
+    parser.add_argument('-i, --input', dest='input', type=str, help='input directory', required=True)
+    return parser.parse_args()
+
+
+PROJECT_RES_PATH, OUT_RES_PATH = attrgetter("input", "output")(get_args())
 
 name_map = {}
 
