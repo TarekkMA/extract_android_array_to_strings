@@ -81,7 +81,7 @@ def write_xml(root: ET.Element, path: str):
         ET.ElementTree(root).write(f, xml_declaration=True, encoding="UTF-8")
 
 
-if __name__ == "__main__":
+def main():
     LANGUAGES = [
         f[len("values-"):]
         for f in os.listdir(PROJECT_RES_PATH)
@@ -98,3 +98,7 @@ if __name__ == "__main__":
     write_xml(constants_root, f"{OUT_RES_PATH}/values/constants.xml")
 
     print("DONE")
+
+
+if __name__ == "__main__":
+    main()
