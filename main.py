@@ -4,16 +4,13 @@ import stringcase
 import lxml.etree as ET
 from pathlib import Path
 
-
 PROJECT_RES_PATH = sys.argv[1]
 OUT_RES_PATH = PROJECT_RES_PATH  # "./out"
-
 
 name_map = {}
 
 
 def fix_arrays(constants_root: ET.Element, lang: str):
-
     should_build_name_map = lang is None
 
     prefix = "-" + lang if lang else ""
@@ -76,20 +73,20 @@ def write_xml(root: ET.Element, path: str):
         ET.ElementTree(root).write(f, xml_declaration=True, encoding="UTF-8")
 
 
-LANGUAGES = [
-    f[len("values-") :]
-    for f in os.listdir(PROJECT_RES_PATH)
-    if f.startswith("values-")
-    and f not in ("values-v21", "values-sw600dp", "values-land")
-]
+if __name__ == "__main__":
+    LANGUAGES = [
+        f[len("values-"):]
+        for f in os.listdir(PROJECT_RES_PATH)
+        if f.startswith("values-") and f not in ("values-v21", "values-sw600dp", "values-land")
+    ]
 
-constants_root = ET.parse(f"{PROJECT_RES_PATH}/values/constants.xml").getroot()
+    constants_root = ET.parse(f"{PROJECT_RES_PATH}/values/constants.xml").getroot()
 
-LANGUAGES = [None] + LANGUAGES
+    LANGUAGES = [None] + LANGUAGES
 
-for lang in LANGUAGES:
-    fix_arrays(constants_root, lang)
+    for lang in LANGUAGES:
+        fix_arrays(constants_root, lang)
 
-write_xml(constants_root, f"{OUT_RES_PATH}/values/constants.xml")
+    write_xml(constants_root, f"{OUT_RES_PATH}/values/constants.xml")
 
-print("DONE")
+    print("DONE")
