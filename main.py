@@ -136,6 +136,8 @@ def copy_arr_str_items(name_dict: Dict[str, List[str]], source: ET.Element, dest
     for arr_name in name_dict:
         for str_name in name_dict[arr_name]:
             string = source.cssselect(f"string[name={str_name}]")[0]
+            for old in destination.cssselect(f"string[name={str_name}]"):
+                destination.remove(old)
             destination.append(string)
 
 
