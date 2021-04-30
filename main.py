@@ -104,6 +104,8 @@ def extract_array(
             new_string_element.attrib["name"] = item_full_name
             new_string_element.text = item.text
             new_string_element.tail = "\n" + TAB
+            for old in arrays_root.cssselect(f"string[name={item_full_name}]"):
+                arrays_root.remove(old)
             arrays_root.append(new_string_element)
 
         # extra line between items
