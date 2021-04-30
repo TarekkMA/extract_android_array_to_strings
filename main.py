@@ -187,7 +187,7 @@ def run(mode: Mode):
 
 def git_commit(message: str):
     subprocess.Popen(["git", "add", "."], cwd=OUT_RES_PATH).wait()
-    subprocess.Popen(["git", "commit", "-m", message], cwd=OUT_RES_PATH).wait()
+    subprocess.Popen(["git", "commit", "-m", f'python script: {message}'], cwd=OUT_RES_PATH).wait()
 
 
 def main():
