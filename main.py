@@ -103,6 +103,8 @@ def extract_array(
 
             new_string_element = ET.Element("string")
             new_string_element.attrib["name"] = item_full_name
+            if item_full_name == "leech_action_labels_suspend_card":  # fix for DuplicateCrowdInStrings
+                new_string_element.attrib["comment"] = "leech_action_labels array"
             new_string_element.text = item.text
             new_string_element.tail = "\n" + TAB
             for old in arrays_root.cssselect(f"string[name={item_full_name}]"):
