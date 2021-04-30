@@ -131,9 +131,6 @@ def copy_arrs(name_dict: Dict[str, List[str]], source: ET.Element, destination: 
 
 
 def copy_arr_str_items(name_dict: Dict[str, List[str]], source: ET.Element, destination: ET.Element):
-    print(ET.tostring(source).decode("utf-8"))
-    for a in source:
-        print(a.nsmap, a.tag, a.attrib.get("name"), a.text)
     destination[-1].tail = "\n" + TAB
     for arr_name in name_dict:
         for str_name in name_dict[arr_name]:
@@ -172,9 +169,8 @@ def run(mode: Mode):
     elif mode == Mode.move_arrays:
         move_to_constants(name_dict)
     elif mode == Mode.fill_translations_with_en:
-        print("E")
-        enarr = get_xml("11-arrays.xml")
         for l in get_langs():
+            enarr = get_xml("11-arrays.xml")
             larr = get_xml("11-arrays.xml", lang=l)
             copy_arr_str_items(name_dict, enarr, larr)
             write_xml(larr, f"{OUT_RES_PATH}/values{lang_prefix(l)}/11-arrays.xml")
