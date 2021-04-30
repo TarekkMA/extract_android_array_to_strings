@@ -15,6 +15,7 @@ class Mode(Enum):
     extract_translations = "extract_translations"
     fill_translations_with_en = "fill_translations_with_en"  # simulate crowdin
     move_arrays = "move_arrays"
+    run_all = "run_all"
 
     def __str__(self):
         return self.value
@@ -30,7 +31,7 @@ class Mode(Enum):
 def get_args():
     parser = argparse.ArgumentParser(description='XML Array Extraction Tool')
     parser.add_argument("mode", type=Mode, choices=list(Mode))
-    parser.add_argument('--output', dest='output', type=str, help='output directory', default="./out")
+    parser.add_argument('-o ,--output', dest='output', type=str, help='output directory', default="./out")
     parser.add_argument('-i, --input', dest='input', type=str, help='input directory', required=True)
     return parser.parse_args()
 
@@ -180,7 +181,13 @@ def run(mode: Mode):
 
 
 def main():
-    run(MODE)
+    if MODE == Mode.run_all:
+        run(Mode.extract_english)
+        run(Mode.fill_translations_with_en)
+        run(Mode.extract_translations)
+        run(Mode.move_arrays)
+    else:
+        run(MODE)
 
 
 if __name__ == "__main__":
