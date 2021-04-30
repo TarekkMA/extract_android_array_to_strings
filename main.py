@@ -179,7 +179,7 @@ def run(mode: Mode):
             write_xml(larr, f"{OUT_RES_PATH}/values{lang_prefix(l)}/11-arrays.xml")
     else:
         raise Exception(f"Unknown mode '{mode}'")
-    print(f"{MODE} DONE")
+    print(f"{mode} DONE")
 
 
 def main():
