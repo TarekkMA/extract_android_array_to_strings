@@ -3,6 +3,7 @@ import re
 from enum import Enum
 from typing import Dict, List
 import subprocess
+from zipfile import ZipFile
 
 import stringcase
 import lxml.etree as ET
@@ -16,6 +17,7 @@ class Mode(Enum):
     extract_translations = "extract_translations"
     fill_translations_with_en = "fill_translations_with_en"  # simulate crowdin
     move_arrays = "move_arrays"
+    zip_arrays = "zip_arrays"
     run_all = "run_all"
 
     def __str__(self):
@@ -182,6 +184,8 @@ def run(mode: Mode):
             larr = get_xml("11-arrays.xml", lang=l)
             copy_arr_str_items(name_dict, enarr, larr)
             write_xml(larr, f"{OUT_RES_PATH}/values{lang_prefix(l)}/11-arrays.xml")
+    elif mode == Mode.zip_arrays:
+        zip_arrays()
     else:
         raise Exception(f"Unknown mode '{mode}'")
     print(f"{mode} DONE")
@@ -190,6 +194,15 @@ def run(mode: Mode):
 def git_commit(message: str):
     subprocess.Popen(["git", "add", "."], cwd=OUT_RES_PATH).wait()
     subprocess.Popen(["git", "commit", "-m", f'python script: {message}'], cwd=OUT_RES_PATH).wait()
+
+
+def zip_arrays():
+    base_dir = "values"
+    with ZipFile('11-arrays.zip', 'w') as zipobj:
+        for l in get_langs():
+            src = f'{OUT_RES_PATH}/{base_dir}{lang_prefix(l)}/11-arrays.xml'
+            out = f'{base_dir}{lang_prefix(l)}/11-arrays.xml'
+            zipobj.write(src, out)
 
 
 def main():
@@ -202,6 +215,7 @@ def main():
         git_commit("extract_translations")
         run(Mode.move_arrays)
         git_commit("move_arrays")
+        run(Mode.zip_arrays)
     else:
         run(MODE)
 
