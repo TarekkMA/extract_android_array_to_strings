@@ -2,6 +2,7 @@ import os
 import re
 from enum import Enum
 from typing import Dict, List
+import subprocess
 
 import stringcase
 import lxml.etree as ET
@@ -159,7 +160,7 @@ def get_langs():
     langs = [
         f[len("values-"):]
         for f in os.listdir(PROJECT_RES_PATH)
-        if f.startswith("values-") and f not in ("values-v21", "values-sw600dp", "values-land")
+        if f.startswith("values-") and f not in ("values-v21", "values-sw600dp", "values-land", "values-ldrtl")
     ]
     return langs
 
@@ -184,12 +185,21 @@ def run(mode: Mode):
     print(f"{mode} DONE")
 
 
+def git_commit(message: str):
+    subprocess.Popen(["git", "add", "."], cwd=OUT_RES_PATH).wait()
+    subprocess.Popen(["git", "commit", "-m", message], cwd=OUT_RES_PATH).wait()
+
+
 def main():
     if MODE == Mode.run_all:
         run(Mode.extract_english)
+        git_commit("extract_english")
         run(Mode.fill_translations_with_en)
+        git_commit("fill_translations_with_en")
         run(Mode.extract_translations)
+        git_commit("extract_translations")
         run(Mode.move_arrays)
+        git_commit("move_arrays")
     else:
         run(MODE)
 
